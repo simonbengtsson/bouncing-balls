@@ -6,7 +6,7 @@ $(document).ready(function () {
     ctx = canvas.getContext('2d');
     resizeCanvas();
     var world = new World();
-    setInterval(world.update, 5);
+    setInterval(world.update, 5); // World should update every 5 ms
 });
 
 function resizeCanvas() {
@@ -23,6 +23,7 @@ function Ball(color) {
     const MASS = 20;
     const INIT_SPEED_X = 0;
     const INIT_SPEED_Y = 2;
+    const GRAVITY = 0.07;
 
     // Initialize
     this.color = color;
@@ -39,6 +40,7 @@ function Ball(color) {
      * Updates potential next position from speed
      */
     this.update = function () {
+        this.speedY += GRAVITY;
         this.x += this.speedX;
         this.y += this.speedY;
         this.nextX = this.x;
@@ -52,25 +54,25 @@ function Ball(color) {
 
         // Top
         if (this.nextX - this.radius < 0) {
-            this.speedX = this.speedX * (-1);
+            this.speedX *= -1;
             this.nextX = this.radius;
         }
 
         // Right
         else if (this.nextX + this.radius > canvas.width) {
-            this.speedX = this.speedX * (-1);
+            this.speedX *= -1;
             this.nextX = canvas.width - this.radius;
         }
 
         // Bottom
         else if (this.nextY + this.radius > canvas.height) {
-            this.speedY = this.speedY * (-1);
+            this.speedY *= -1;
             this.nextY = canvas.height - this.radius;
         }
 
         // Left
         else if (this.nextY - this.radius < 0) {
-            this.speedY = this.speedY * (-1);
+            this.speedY *= -1;
             this.nextY = this.radius;
         }
 
@@ -93,25 +95,36 @@ function Ball(color) {
  */
 function World() {
 
-    const BALL_COUNT = 10;
-    const GRAVITY = 5;
+    const BALL_COUNT = 5;
 
     var balls = [];
 
     // Create and place balls. Only add if they don't overlap any other
     for (var i = 0; i < BALL_COUNT; i++) {
         var color = i % 2 === 0 ? '#fff' : '#000';
-        var tmpBall = new Ball(color);
-        balls.push(tmpBall);
+        balls.push(new Ball(color));
     }
 
+    /**
+     * Check if the specified ball overlaps any other
+     * @param ball
+     * @returns {boolean}
+     */
+    function isOverlap(ball) {
+        for (var i = 0; i < balls.length; i++) {
+            if (ball.collision(balls[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * All world updates through here
      */
     this.update = function () {
         resizeCanvas();
-        ballCollisions();
+        //ballCollisions();
         balls.forEach(function (ball) {
             ball.update();
             ball.wallCollision();
@@ -120,11 +133,4 @@ function World() {
             ball.draw();
         });
     };
-
-    /**
-     * Check if any ball has collided with any other and if so update appropriately
-     */
-    function ballCollisions() {
-        // TODO
-    }
 }
