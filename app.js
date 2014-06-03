@@ -19,14 +19,14 @@ function Ball(color) {
 
     const RADIUS = 30;
     const MASS = 20;
-    const INIT_SPEED_X = 0;
+    const INIT_SPEED_X = 1;
     const INIT_SPEED_Y = 2;
     const GRAVITY = 0.07;
 
     // Initialize
     this.color = color;
-    this.mass = MASS;
-    this.radius = RADIUS;
+    this.mass = 20 + (Math.random() * 60);
+    this.radius = this.mass;
     this.x = Math.floor(Math.random() * canvas.width);
     this.y = Math.floor(Math.random() * canvas.height);
     this.nextX = this.x;
