@@ -33,6 +33,7 @@ function Ball(color) {
     this.nextY = this.y;
     this.speedX = INIT_SPEED_X;
     this.speedY = INIT_SPEED_Y;
+    this.collisionCount = 0;
 
     /**
      * Updates potential next position from speed
@@ -142,6 +143,16 @@ function Ball(color) {
         this.nextY += this.speedY;
         ball.nextX += ball.speedX;
         ball.nextY += ball.speedY;
+
+        while(this.collision(ball)){
+            this.nextX += this.speedX;
+            this.nextY += this.speedY;
+            ball.nextX += ball.speedX;
+            ball.nextY += ball.speedY;
+
+            console.log("Still collision.");
+        }
+
     };
 }
 
@@ -150,7 +161,7 @@ function Ball(color) {
  */
 function World() {
 
-    const BALL_COUNT = 10;
+    const BALL_COUNT = 15;
     const GRAVITY = 5;
 
     var balls = [];
