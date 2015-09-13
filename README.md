@@ -1,4 +1,4 @@
-# Bouncing BallsE #
+# Bouncing Balls #
 
 Bouncing balls (circle collisions) implemented with javascript and HTML5 canvas. Written as part of the course DAT026 Matematisk modellering VT 2014.
 
